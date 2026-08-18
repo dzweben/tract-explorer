@@ -587,7 +587,7 @@ function loadText(text, name) {
     boot();
   } catch (x) { showMsg('Could not load: ' + x.message, false); }
 }
-// Optional page labels via URL query: ?title=…&method=…&node0=…&node1=…&n_perms=…&scripts_note=…
+// Optional page labels can be passed as URL query params (title, sub, method, node0, node1, n_perms, scripts_note).
 function urlMeta() { const u = new URLSearchParams(location.search); const m = {}; ['title', 'sub', 'method', 'node0', 'node1', 'n_perms', 'scripts_note'].forEach(k => { if (u.get(k)) m[k] = u.get(k); }); return m; }
 function readFile(f) { const rd = new FileReader(); rd.onload = () => loadText(rd.result, f.name); rd.readAsText(f); }
 
@@ -1266,7 +1266,7 @@ function loadText(text, name) {
     boot();
   } catch (x) { showMsg('Could not load: ' + x.message, false); }
 }
-// Optional page labels via URL query: ?title=…&method=…&node0=…&node1=…&n_perms=…&scripts_note=…
+// Optional page labels can be passed as URL query params (title, sub, method, node0, node1, n_perms, scripts_note).
 function urlMeta() { const u = new URLSearchParams(location.search); const m = {}; ['title', 'sub', 'method', 'node0', 'node1', 'n_perms', 'scripts_note'].forEach(k => { if (u.get(k)) m[k] = u.get(k); }); return m; }
 function readFile(f) { const rd = new FileReader(); rd.onload = () => loadText(rd.result, f.name); rd.readAsText(f); }
 
