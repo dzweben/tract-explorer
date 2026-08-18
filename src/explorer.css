@@ -1,0 +1,99 @@
+/* =============================================================================
+   Node-wise Tract Explorer — styles
+   =============================================================================
+   Dark theme. Everything is driven by the CSS variables in :root, so re-theming
+   is a matter of changing those. Sections mirror the parts of the page.
+   ============================================================================= */
+
+/* ---- theme tokens ---------------------------------------------------------- */
+:root{
+  --bg:#0f1117;      /* page background */
+  --card:#1a1d27;    /* section panels */
+  --card2:#232733;   /* inputs, buttons, hover rows, detail panel */
+  --ink:#e6e9ef;     /* main text */
+  --mut:#9aa3b2;     /* muted text: labels, legends, tags */
+  --line:#2c3140;    /* borders */
+  --pos:#f4664a;     /* positive effect (orange) */
+  --neg:#3b82f6;     /* negative effect (blue) */
+  --sig:#22c55e;     /* significant / passed FWE (green) */
+  --accent:#a78bfa;  /* headings, links, active controls (violet) */
+}
+
+/* ---- base ------------------------------------------------------------------ */
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+header{padding:22px 26px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#171a24,#0f1117)}
+h1{margin:0 0 4px;font-size:22px}
+.sub{color:var(--mut);font-size:13px}
+.wrap{padding:20px 26px;max-width:1400px;margin:0 auto}
+.section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:16px 0}
+.section h2{margin:0 0 12px;font-size:16px;color:var(--accent)}
+.legend{font-size:12px;color:var(--mut);margin-top:8px}
+.tag{font-size:11px;color:var(--mut)}
+a.back{color:var(--accent);text-decoration:none;font-size:13px}
+
+/* ---- loader: drop zone, buttons, messages, format doc ---------------------- */
+.drop{border:2px dashed var(--line);border-radius:10px;padding:26px 20px;text-align:center;color:var(--mut);font-size:14px;background:var(--card2);transition:border-color .12s,color .12s}
+.drop.over{border-color:var(--accent);color:var(--ink)}       /* while dragging a file over it */
+.flink{color:var(--accent);cursor:pointer;text-decoration:underline}
+.loaderr{color:#fb7a5e;font-size:13px;margin-top:8px;white-space:pre-wrap}   /* error message */
+.ok{color:#4ade80;font-size:13px;margin-top:8px}                            /* success message */
+.btnrow{display:flex;gap:12px;margin-top:14px;flex-wrap:wrap}
+.bigbtn{flex:1 1 220px;display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center;text-decoration:none;padding:16px 18px;border-radius:10px;background:var(--card2);border:1px solid var(--accent);color:var(--ink);transition:background .12s}
+.bigbtn:hover{background:#2a2f3f;text-decoration:none}
+.bigbtn .bt{font-size:15px;font-weight:700;color:var(--accent)}   /* button title */
+.bigbtn .bs{font-size:12px;color:var(--mut)}                        /* button subtitle */
+.doc{font-size:13px;line-height:1.6;color:var(--ink);margin-top:8px}
+.doc code{background:#12141c;border:1px solid var(--line);border-radius:4px;padding:1px 5px;font-size:12px;color:#c9d1e0}
+.doc b{color:var(--accent)}
+.doc table{width:auto;margin:6px 0}
+.doc td,.doc th{padding:4px 10px;font-size:12.5px}
+
+/* ---- filter controls ------------------------------------------------------- */
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.controls select,.controls input{background:var(--card2);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-size:13px}
+.controls label{color:var(--mut);font-size:12px;margin-right:3px}
+.count{color:var(--mut);font-size:13px;margin-left:auto}   /* "N of M analyses · K FWE-significant" */
+
+/* ---- results table --------------------------------------------------------- */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.04em;padding:8px 10px;border-bottom:1px solid var(--line);cursor:pointer;user-select:none;white-space:nowrap}
+th:hover{color:var(--ink)}                 /* headers are click-to-sort */
+td{padding:8px 10px;border-bottom:1px solid #20242f}
+tr.row{cursor:pointer}                    /* rows are click-to-expand */
+tr.row:hover{background:var(--card2)}
+tr.sig td{background:rgba(34,197,94,.06)} /* faint green tint on FWE-significant rows */
+
+/* badges used in table + detail */
+.badge{display:inline-block;border-radius:6px;padding:2px 7px;font-size:11px;font-weight:600}
+.b-sig{background:rgba(34,197,94,.16);color:#4ade80}   /* passed FWE */
+.b-ns{background:#242835;color:var(--mut)}             /* not significant */
+.b-pos{background:rgba(244,102,74,.16);color:#fb7a5e}  /* positive direction */
+.b-neg{background:rgba(59,130,246,.16);color:#60a5fa}  /* negative direction */
+
+/* ---- detail panel (opens under a clicked row) ------------------------------ */
+.detail{background:var(--card2);border-top:2px solid var(--accent)}
+.detail td{padding:0}
+.dbox{padding:18px 22px}
+.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px}   /* left: stats · right: node plot */
+.dcol h4{margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--accent)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:13px}   /* key/value stat list */
+.kv .k{color:var(--mut)}
+.nodeviz{margin-top:10px;background:#12141c;border:1px solid var(--line);border-radius:8px;padding:10px}   /* holds the SVG node plots */
+.script{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;color:#c9d1e0;background:#12141c;border:1px solid var(--line);border-radius:8px;padding:10px;margin-top:4px;white-space:pre-wrap;line-height:1.45}
+
+/* laterality bar: L (blue) vs R (orange) share of significant nodes */
+.latbar{display:flex;height:26px;border-radius:6px;overflow:hidden;border:1px solid var(--line);margin-top:6px}
+.latbar .L{background:#3b82f6;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff}
+.latbar .R{background:#f4664a;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff}
+
+/* ---- misc (kept for compatibility with the JSON input path) ---------------- */
+.pill{display:inline-block;background:var(--card2);border:1px solid var(--line);border-radius:999px;padding:3px 11px;margin:2px;font-size:12px;color:var(--mut)}
+.grid{display:grid;gap:10px}
+.demo-grid{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.stat{background:var(--card2);border:1px solid var(--line);border-radius:9px;padding:11px 13px}
+.stat .k{color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+.stat .v{font-size:19px;font-weight:600;margin-top:3px}
+.stat .d{color:var(--mut);font-size:12px;margin-top:2px}
+.hemi{font-weight:600}
+.clbl{font-size:11px;color:var(--mut)}

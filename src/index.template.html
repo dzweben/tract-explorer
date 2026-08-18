@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<!--
+  =============================================================================
+  Node-wise Tract Explorer — page skeleton
+  =============================================================================
+  This is the HTML the app hangs off. build.py inlines src/explorer.css at
+  {{CSS}} and src/explorer.js at {{JS}} to produce the single-file index.html
+  (so the deployed page has no external dependencies).
+
+  The JS finds these elements BY ID — keep the ids if you restructure:
+    #drop      drag-and-drop zone         #file     hidden <input type=file>
+    #loadex    "load example" button       #loaderr  status / error message
+    #explorer  the results section (hidden until data loads)
+    #exptitle  results title               #expsub   results subtitle
+    #filters   filter dropdowns go here    #thead    table header  #tbody  table body
+  =============================================================================
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Node-wise Tract Explorer</title>
+<style>
+{{CSS}}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Node-wise Tract Explorer</h1>
+  <div class="sub">A reusable, in-browser viewer for along-tract (node-wise) statistical results. Drop in a results file and browse it: filter by any dimension in your data, click a row for the node profile, clusters, laterality, and stats. Nothing is uploaded — files are parsed locally in your browser.</div>
+</header>
+
+<div class="wrap">
+
+  <!-- ============ LOAD PANEL ============ -->
+  <div class="section" id="loader">
+    <h2>Load results</h2>
+
+    <!-- drag-and-drop zone + file picker -->
+    <div id="drop" class="drop">Drop your results <b>.csv</b> here — or <label class="flink">choose a file<input type="file" id="file" accept=".csv,text/csv,.json" hidden></label></div>
+
+    <!-- the two big entry buttons -->
+    <div class="btnrow">
+      <a href="sample_results.csv" download class="bigbtn"><span class="bt">Download the sample CSV</span><span class="bs">copy its structure for your data</span></a>
+      <a href="#" id="loadex" class="bigbtn"><span class="bt">Load an example dataset</span><span class="bs">see the explorer populated</span></a>
+    </div>
+
+    <!-- status / error line (filled by JS) -->
+    <div id="loaderr" class="loaderr" style="display:none"></div>
+
+    <!-- the data-format documentation -->
+    <details style="margin-top:14px" open>
+      <summary style="cursor:pointer;color:var(--accent);font-weight:600;font-size:13px">Data format</summary>
+      <div class="doc">
+        <b>Fit your data to the sample CSV.</b> One row per node. Six required columns — <code>outcome, tract, metric, node, t, p</code> — everything else optional. Your permutation output already has the node-wise <code>t</code> and <code>p</code>; you just stack your analyses into one file and label each row with its outcome, tract, and metric. Column names are case-insensitive (<code>Node</code>, <code>t_value</code>, <code>p_value</code> etc. are fine as-is).
+        <br><br><b>Columns:</b>
+        <table><thead><tr><th>Column</th><th>Required?</th><th>Meaning</th></tr></thead><tbody>
+          <tr><td><code>outcome</code></td><td>yes</td><td>what was predicted (e.g. SOCIAL_dprime)</td></tr>
+          <tr><td><code>tract</code></td><td>yes</td><td>tract label — any number of tracts</td></tr>
+          <tr><td><code>metric</code></td><td>yes</td><td>the along-tract measure (FA, NDI, MD …)</td></tr>
+          <tr><td><code>node</code></td><td>yes</td><td>0-based node index — any node count</td></tr>
+          <tr><td><code>t</code> / <code>t_value</code>, <code>p</code> / <code>p_value</code></td><td>yes</td><td>that node's statistic and uncorrected p, straight from <code>_nodewise.csv</code></td></tr>
+          <tr><td><code>hemisphere</code></td><td>no</td><td>L / R — if present, the laterality bar and the L-vs-R overlap panel appear; if absent they are hidden</td></tr>
+          <tr><td><code>N</code>, <code>covariates</code></td><td>no</td><td>sample size and the controls in the model (any text) — shown per analysis</td></tr>
+          <tr><td><code>extent_threshold</code></td><td>no</td><td>the permutation cluster-size threshold (<code>ExtentThresholdNodes</code>); clusters at least this long are marked FWE-significant</td></tr>
+          <tr><td><code>cluster_p</code>, <code>passed</code></td><td>no</td><td>your FWE cluster p and verdict (1/0, TRUE/FALSE)</td></tr>
+          <tr><td><b>any other column</b></td><td>—</td><td><b>becomes a filter</b> (family, condition, cohort, site, task …). Single-valued columns are auto-hidden. <code>Estimate</code> and <code>df</code> are ignored.</td></tr>
+        </tbody></table>
+        Everything else is derived here in the browser from your node rows: sig-node counts, clusters (contiguous p&lt;.05 runs), max cluster, laterality and the hemispheric-overlap panel. You never compute cluster stats yourself. Nothing is uploaded.
+        <br>Optional page labels via URL: <code>?title=…&amp;method=Freedman–Lane&amp;node0=start&amp;node1=end&amp;n_perms=5000</code>, or <code>?data=URL</code> to auto-load a hosted CSV.
+      </div>
+      <div class="script" style="margin-top:10px">outcome,tract,metric,node,t,p,hemisphere,N,covariates,extent_threshold,cluster_p,passed
+memory_score,uncinate,FA,0,2.040,0.0472,L,52,"age, sex, motion",26,0.0032,1
+memory_score,uncinate,FA,1,2.057,0.0455,L,52,"age, sex, motion",26,0.0032,1
+...   one row per node, then the next tract / metric / outcome</div>
+      <div class="tag" style="margin-top:6px"><a href="sample_results.csv" download style="color:var(--accent)">sample_results.csv</a> (small, copy this structure) · <a href="example_results_long.csv" style="color:var(--accent)">example_results_long.csv</a> (a full example dataset)</div>
+    </details>
+  </div>
+
+  <!-- ============ RESULTS (hidden until data loads) ============ -->
+  <div class="section" id="explorer" style="display:none">
+    <h2 id="exptitle">Results</h2>
+    <div id="expsub" class="sub" style="margin-bottom:12px"></div>
+    <div class="controls" id="filters"></div>                 <!-- filter dropdowns are built here by JS -->
+    <table id="tbl"><thead id="thead"></thead><tbody id="tbody"></tbody></table>
+    <div class="legend">FWE = cluster passes the permutation extent threshold (from your <code>extent_threshold</code> / <code>passed</code> columns). Direction: <span class="badge b-pos">Positive</span> higher metric → higher outcome · <span class="badge b-neg">Negative</span> higher metric → lower outcome. Node values are whatever statistic you supplied in <code>t</code> (partial-regression t recommended). Where hemispheres exist, the detail view stacks L and R aligned by node; nodes significant on <span style="color:#4ade80">both</span> sides are green.</div>
+  </div>
+
+</div>
+
+<script>
+{{JS}}
+</script>
+</body>
+</html>
