@@ -82,6 +82,11 @@ a.back{color:var(--accent);text-decoration:none;font-size:13px}
 .doc b{color:var(--accent)}
 .doc table{width:auto;margin:6px 0}
 .doc td,.doc th{padding:4px 10px;font-size:12.5px}
+.btnrow{display:flex;gap:12px;margin-top:14px;flex-wrap:wrap}
+.bigbtn{flex:1 1 220px;display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center;text-decoration:none;padding:16px 18px;border-radius:10px;background:var(--card2);border:1px solid var(--accent);color:var(--ink);transition:background .12s}
+.bigbtn:hover{background:#2a2f3f;text-decoration:none}
+.bigbtn .bt{font-size:15px;font-weight:700;color:var(--accent)}
+.bigbtn .bs{font-size:12px;color:var(--mut)}
 </style>"""
 
 
@@ -333,7 +338,10 @@ BODY = f"""<header>
 <div class="wrap">
 <div class="section" id="loader"><h2>Load results</h2>
 <div id="drop" class="drop">Drop your results <b>.csv</b> here — or <label class="flink">choose a file<input type="file" id="file" accept=".csv,text/csv,.json" hidden></label></div>
-<div style="margin-top:10px;font-size:13px;color:var(--mut)">New here? <a href="sample_results.csv" download class="flink" style="font-weight:600">Download the sample CSV</a> to see exactly how to structure yours (a small real example: 2 outcomes × 2 tracts × 2 metrics, 100 nodes) &nbsp;·&nbsp; or <a href="#" id="loadex" class="flink">load a full example dataset</a> to see the explorer populated.</div>
+<div class="btnrow">
+<a href="sample_results.csv" download class="bigbtn"><span class="bt">Download the sample CSV</span><span class="bs">copy its structure for your data</span></a>
+<a href="#" id="loadex" class="bigbtn"><span class="bt">Load an example dataset</span><span class="bs">see the explorer populated</span></a>
+</div>
 <div id="loaderr" class="loaderr" style="display:none"></div>
 <details style="margin-top:14px" open><summary style="cursor:pointer;color:var(--accent);font-weight:600;font-size:13px">Data format</summary>
 {DOC}
