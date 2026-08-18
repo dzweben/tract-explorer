@@ -67,8 +67,7 @@
           <tr><td><code>cluster_p</code>, <code>passed</code></td><td>no</td><td>your FWE cluster p and verdict (1/0, TRUE/FALSE)</td></tr>
           <tr><td><b>any other column</b></td><td>—</td><td><b>becomes a filter</b> (family, condition, cohort, site, task …). Single-valued columns are auto-hidden. <code>Estimate</code> and <code>df</code> are ignored.</td></tr>
         </tbody></table>
-        Everything else is derived here in the browser from your node rows: sig-node counts, clusters (contiguous p&lt;.05 runs), max cluster, laterality and the hemispheric-overlap panel. You never compute cluster stats yourself. Nothing is uploaded.
-        <br>Optional page labels via URL: <code>?title=…&amp;method=Freedman–Lane&amp;node0=start&amp;node1=end&amp;n_perms=5000</code>, or <code>?data=URL</code> to auto-load a hosted CSV.
+        Everything else is derived here in the browser from your node rows: sig-node counts, clusters (contiguous p&lt;.05 runs), max cluster, laterality and the hemispheric-overlap panel.
       </div>
       <div class="script" style="margin-top:10px">outcome,tract,metric,node,t,p,hemisphere,N,covariates,extent_threshold,cluster_p,passed
 memory_score,uncinate,FA,0,2.040,0.0472,L,52,"age, sex, motion",26,0.0032,1
